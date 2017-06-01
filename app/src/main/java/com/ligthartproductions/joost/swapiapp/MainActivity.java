@@ -39,15 +39,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Vind de buttons en zet er een onclicklistener aan vast
         Button btnFavorites = (Button) findViewById(R.id.btn_favorites);
         btnFavorites.setOnClickListener(this);
 
         Button btnSortAge = (Button) findViewById(R.id.btn_sortAge);
         btnSortAge.setOnClickListener(this);
 
-
+        // Maakt een nieuwe ArrayList aan.
         characterList = new ArrayList<>();
 
+        // Vind de ListView en zet deze in een variabele
         lv = (ListView) findViewById(R.id.list_ResultList);
 
         new GetCharacters().execute();
@@ -57,15 +59,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void onClick(View v) {
         switch (v.getId()) {
-            // Als de Settings button wordt ingedrukt dan gaat de gebruiker naar de SettingsActivity
+            // Als de Favorites button wordt ingedrukt dan gaat de gebruiker naar de FavoritesActivity
             case R.id.btn_favorites:
                 Intent intent = new Intent(this, FavoritesActivity.class);
                 startActivity(intent);
                 break;
 
+            // Als de sortAge button wordt ingedrukt wordt sortAge true als hij false is en false als hij true is.
             case R.id.btn_sortAge:
                 sortAge = !sortAge;
-//                changeSorting();
+
+                // Herhaald de GetCharacters.
                 new GetCharacters().execute();
                 break;
 
@@ -85,8 +89,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             pDialog.setMessage("Loading character information...");
             pDialog.setCancelable(false);
             pDialog.show();
-
-
         }
 
 
@@ -109,11 +111,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         for (int i = 0; i < characters.length(); i++) {
                             JSONObject c = characters.getJSONObject(i);
 
+                            //Haalt de naam en geboortenaam uit de Json en zet deze in een variabele
                             String name = c.getString("name");
                             String birth_year = c.getString("birth_year");
 
+                            // Er wordt een nieuwe hashmap aangemaakt genaamd character.
                             HashMap<String, String> character = new HashMap<>();
-
 
                             //Voegt de informatie in de HashMap
                             character.put("name", name);
@@ -122,7 +125,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             // Voegt de karakter toe aan de lijst
                             characterList.add(character);
 
+                            // Er wordt gekeken of sortAge true of false is.
                             if(!sortAge) {
+                                // Als sortAge false is dan wordt de lijst op naam gesorteerd (dit is standaard als de app wordt opgestart).
                                 Collections.sort(characterList, new Comparator<HashMap<String, String>>() {
                                     @Override
                                     public int compare(HashMap<String, String> lhs,
@@ -132,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     }
                                 });
                             } else {
+                                // Als sortAge true is wordt de lijst gesorteerd naar geboortejaar
                                 Collections.sort(characterList, new Comparator<HashMap<String, String>>() {
                                     @Override
                                     public int compare(HashMap<String, String> lhs,

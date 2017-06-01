@@ -27,10 +27,13 @@ public class HttpRequest {
     public String makeServiceCall(String reqUrl) {
         String response = null;
         try {
+            // Er wordt een url opgehaald en een connectie ermee gelegd.
             URL url = new URL(reqUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            // Er wordt een GET methode gevraagd
             conn.setRequestMethod("GET");
 
+            // De binnengekomen data opgevangen en de convertStreamToString wordt geroepen.
             InputStream in = new BufferedInputStream(conn.getInputStream());
             response = convertStreamToString(in);
         } catch (MalformedURLException e) {
@@ -42,10 +45,12 @@ public class HttpRequest {
         } catch (Exception e) {
             Log.e(TAG, "Exception: " + e.getMessage());
         }
+        //String wordt teruggestuurd naar MainActivity
         return response;
     }
 
     private String convertStreamToString(InputStream is) {
+        // De binnengekomen data wordt omgezet in een string.
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
 
